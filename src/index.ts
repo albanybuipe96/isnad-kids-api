@@ -1,11 +1,15 @@
 import { Hono } from 'hono';
 import { ZodError } from 'zod';
 import health from './features/health/health.routes';
+import content from './features/content/content.routes';
 import { ErrorMessages } from './common/messages';
 
-const app = new Hono();
+type Env = { Bindings: { DB: D1Database } };
+
+const app = new Hono<Env>();
 
 app.route('/health', health);
+app.route('/content', content);
 
 app.notFound((c) => {
   return c.json({ error: { message: ErrorMessages.NOT_FOUND, status: 404 } }, 404);
