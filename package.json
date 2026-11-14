@@ -1,0 +1,39 @@
+{
+  "name": "isnad-kids-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "Isnād Kids backend: Hono on Cloudflare Workers with a NestJS-style module layout",
+  "scripts": {
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate:local": "wrangler d1 migrations apply isnad-kids --local",
+    "db:migrate:remote": "wrangler d1 migrations apply isnad-kids --remote",
+    "db:seed:local": "wrangler d1 execute isnad-kids --local --file=./seed/dev-admins.sql",
+    "openapi:export": "tsx scripts/export-openapi.ts",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings"
+  },
+  "dependencies": {
+    "@hono/swagger-ui": "^0.6.2",
+    "@hono/zod-openapi": "^1.6.3",
+    "better-auth": "^1.7.23",
+    "drizzle-orm": "^0.45.4",
+    "hono": "^4.13.18",
+    "jose": "^6.2.17",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.8.2",
+    "@cloudflare/workers-types": "^5.20261114.1",
+    "@types/node": "^22.20.5",
+    "drizzle-kit": "^0.31.11",
+    "tsx": "^4.23.15",
+    "typescript": "^7.0.2",
+    "vitest": "^4.1.0",
+    "wrangler": "^4.162.0"
+  }
+}

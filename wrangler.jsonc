@@ -1,0 +1,34 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "isnad-kids-api",
+  "main": "src/main.ts",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat"],
+  "observability": { "enabled": true },
+
+  // Non-secret configuration. Secrets go in .dev.vars locally and `wrangler secret put` in production.
+  "vars": {
+    "ENVIRONMENT": "production",
+    "BETTER_AUTH_URL": "https://api.isnadkids.app",
+    "MEDIA_PUBLIC_BASE_URL": "https://media.isnadkids.app",
+    "ADMIN_ORIGIN": "https://admin.isnadkids.app",
+    "ACCESS_TEAM_DOMAIN": "isnadkids.cloudflareaccess.com",
+    "ACCESS_AUD": "replace-with-your-access-application-aud-tag"
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "isnad-kids",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "migrations"
+    }
+  ],
+
+  "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "isnad-kids-media" }],
+
+  "queues": {
+    "producers": [{ "binding": "PACK_QUEUE", "queue": "isnad-kids-packs" }],
+    "consumers": [{ "queue": "isnad-kids-packs", "max_batch_size": 1, "max_retries": 3 }]
+  }
+}
