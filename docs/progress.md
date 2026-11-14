@@ -4,17 +4,17 @@ Last updated: 2026-11-14
 
 ## Current state
 
-A bare Hono app:
+Per-feature folder structure is in place with a working `/health` endpoint:
 
-- `src/index.ts` has `GET /`, which returns a text greeting.
+- `src/index.ts` creates the app and mounts feature routers.
+- `src/features/health/health.routes.ts` — `GET /health` returns `{ "status": "ok" }`.
 - `package.json` has two scripts: `dev` and `deploy`.
 - `wrangler.jsonc` sets the Worker name, the entry file and the compatibility date.
 - `tsconfig.json` uses strict mode.
+- `.prettierrc` enforces single quotes (Prettier added as dev dependency).
 - `.gitignore` ignores `node_modules/`, `.wrangler/` and `.dev.vars`.
 
-## Current step: 1. Project structure + `/health`
-
-Proposed structure:
+Feature folder convention:
 
 ```
 src/
@@ -26,22 +26,19 @@ src/
       <name>.schemas.ts             Zod schemas: validation and types
 ```
 
-Owner's task: create `src/features/health/health.routes.ts` (a Hono router whose `GET /` returns
-`{ "status": "ok" }`), mount it in `src/index.ts` with `app.route('/health', ...)`, visit `/health`,
-then share the code for review.
+## Current step: 2. Validation (Zod) + one global error format
+
+(Details to be planned.)
 
 ## Open decisions
 
-- [ ] Folder name: `features/` or `modules/`?
-- [ ] File suffix: `.routes.ts` or `.controller.ts`? (Recommended: `.routes.ts`.)
-- [ ] Nest-inspired ideas to adopt. Recommended yes:
-  - Zod schemas per feature
-  - One global error format via `app.onError`
-  - Environment variables validated with Zod at startup
-  - Auth guards as plain Hono middleware
-  - A test file beside each feature
+(None right now.)
 
-  Recommended no: dependency injection, decorators, module classes.
+## Completed steps
+
+### 1. Project structure + `/health`
+
+Created the per-feature folder structure and a health check endpoint. Prettier added with single quotes.
 
 ## Decisions made
 
@@ -49,10 +46,14 @@ then share the code for review.
 - From NestJS, copy only the per-feature folder structure.
 - Build the content side before accounts: the MVP works offline for the owner's own children without logins.
 - Default git branch: `master`.
+- Folder name: `features/` (not `modules/`, to avoid implying Nest-style module classes).
+- File suffix: `.routes.ts` (not `.controller.ts`, since these are plain Hono routers, not Nest controllers).
+- Nest-inspired ideas adopted (built when needed, not now): Zod schemas per feature, one global error format via `app.onError`, env vars validated with Zod at startup, auth guards as plain Hono middleware, a test file beside each feature.
+- Nest ideas rejected: dependency injection, decorators, module classes.
 
 ## Roadmap
 
-1. Project structure + `/health` ← current
+1. ~~Project structure + `/health`~~ ✓
 2. Validation (Zod) + one global error format
 3. D1 + Drizzle: migrations and the first table
 4. Content items: create, list, edit, delete (no auth yet)
