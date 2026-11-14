@@ -1,8 +1,0 @@
-import { defineConfig } from 'drizzle-kit';
-
-// Generates SQL migrations into ./migrations, which `wrangler d1 migrations apply` runs.
-export default defineConfig({
-  dialect: 'sqlite',
-  schema: './src/database/schema/index.ts',
-  out: './migrations',
-});
