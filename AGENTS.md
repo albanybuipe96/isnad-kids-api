@@ -42,7 +42,10 @@ globally. Visual style: traditional Islamic.
 
 - TypeScript + **Hono** on **Cloudflare Workers** (Hono chosen over Express, NestJS and Fastify
   because it is native to Workers).
-- Planned, added one step at a time: D1 + Drizzle (database), R2 (media files), Queues (building content packs),
+- Database: D1 with **plain SQL** (`c.env.DB.prepare(...).bind(...)`, `.first()`, `.all()`, `.run()`, `db.batch()`)
+  and numbered `.sql` migration files applied with `wrangler d1 migrations apply` (the same approach as the
+  owner's isnad-site project). **No ORM: do not add Drizzle or similar.**
+- Planned, added one step at a time: R2 (media files), Queues (building content packs),
   Cloudflare Access (admin login), Better Auth (parent accounts), Zod (validation, and OpenAPI to generate
   the Dart client for the Flutter app).
 - Repository: https://github.com/albanybuipe96/isnad-kids-api, default branch `master`.
