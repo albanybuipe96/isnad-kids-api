@@ -42,9 +42,9 @@ globally. Visual style: traditional Islamic.
 
 - TypeScript + **Hono** on **Cloudflare Workers** (Hono chosen over Express, NestJS and Fastify
   because it is native to Workers).
-- Database: D1 with **plain SQL** (`c.env.DB.prepare(...).bind(...)`, `.first()`, `.all()`, `.run()`, `db.batch()`)
-  and numbered `.sql` migration files applied with `wrangler d1 migrations apply` (the same approach as the
-  owner's isnad-site project). **No ORM: do not add Drizzle or similar.**
+- Database: D1 with **Drizzle ORM** (tables defined in `src/db/schema.ts`; `drizzle-kit` generates the `.sql`
+  migrations; `wrangler d1 migrations apply` applies them). The owner prefers not to write SQL by hand.
+- Validation: **Zod**.
 - Planned, added one step at a time: R2 (media files), Queues (building content packs),
   Cloudflare Access (admin login), Better Auth (parent accounts), Zod (validation, and OpenAPI to generate
   the Dart client for the Flutter app).

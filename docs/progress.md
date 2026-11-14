@@ -15,11 +15,8 @@ Per-feature folder structure is in place with a working `/health` endpoint:
 - `.gitignore` ignores `node_modules/`, `.wrangler/` and `.dev.vars`.
 - `src/index.ts` also has `app.notFound` and `app.onError` (Zod errors → 400 with details; anything else → 500),
   with messages in `src/common/messages.ts`.
-
-**To remove (owner's task):** commit `8f7aaef` set up Drizzle, which has since been replaced by plain D1 SQL
-(see Decisions made). Remove `drizzle.config.ts`, `src/db/`, the `drizzle/` folder, and the `drizzle-orm` and
-`drizzle-kit` packages. Keep the `d1_databases` binding in `wrangler.jsonc`. The `content_items` table will be
-recreated as a plain `.sql` migration in step 3.
+- Drizzle is set up (commit `8f7aaef`): `drizzle.config.ts`, `src/db/index.ts` (`createDb`), `src/db/schema.ts`
+  (a first `content_items` table) and generated migrations in `drizzle/`. `wrangler.jsonc` has the `DB` binding.
 
 Feature folder convention:
 
@@ -57,15 +54,15 @@ Created the per-feature folder structure and a health check endpoint. Prettier a
 - File suffix: `.routes.ts` (not `.controller.ts`, since these are plain Hono routers, not Nest controllers).
 - Nest-inspired ideas adopted (built when needed, not now): Zod schemas per feature, one global error format via `app.onError`, env vars validated with Zod at startup, auth guards as plain Hono middleware, a test file beside each feature.
 - Nest ideas rejected: dependency injection, decorators, module classes.
-- Database: plain D1 SQL with prepared statements, and numbered `.sql` files in `migrations/` applied with
-  `wrangler d1 migrations apply` — the approach from the owner's isnad-site project. No Drizzle or other ORM.
-  Everything else (Hono, Zod, the folder structure) stays as planned.
+- Database: D1 with Drizzle ORM, so queries are written in TypeScript rather than raw SQL. Considered and
+  rejected: plain SQL (owner prefers not to write queries by hand), Prisma (heavier on Workers), Kysely.
+- Validation: Zod.
 
 ## Roadmap
 
 1. ~~Project structure + `/health`~~ ✓
 2. Validation (Zod) + one global error format
-3. D1 with plain SQL: numbered `.sql` migrations and the first table (no Drizzle)
+3. D1 + Drizzle: migrations and the first table (partly done: Drizzle and `content_items` set up)
 4. Content items: create, list, edit, delete (no auth yet)
 5. Media uploads to R2 (recitation audio, images)
 6. Review workflow: draft → in review → approved, with an audit trail
